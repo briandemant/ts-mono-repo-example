@@ -1,0 +1,11 @@
+{
+	"name": "@geo/point",
+	"version": "0.0.1",
+	"description": "2D Point for you pointing math!",
+	"license": "MIT",
+	"main": "dist/point.js",
+	"types": "dist/point.d.ts",
+	"scripts": {
+		"hello": "echo hello from point"
+	}
+}

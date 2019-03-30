@@ -1,0 +1,12 @@
+// Develop (not build) tsconfig
+{
+	"extends": "./tsconfig.base.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@geo/main": ["commands/main/src/main.ts"],
+			"@geo/point": ["libs/point/src/point.ts"],
+			"@geo/line": ["libs/line/src/line.ts"]
+		}
+	}
+}

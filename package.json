@@ -1,0 +1,39 @@
+{
+	"name": "typescript-mono-repo-example",
+	"version": "0.0.1",
+	"description": "An example of a typescript mono repo",
+	"license": "MIT",
+	"private": true,
+	"workspaces": [
+		"libs/*",
+		"commands/*"
+	],
+	"scripts": {
+		"hello": "lerna run hello",
+		"pretty": "prettier --list-different --write --config prettier.config.js {commands,libs}/*/src/*.{ts,tsx,js*} {commands,libs}/*/*.{ts,tsx,js*} *.{ts,tsx,js*}",
+		"lint": "tslint --fix {commands,libs}/*/src/*",
+		"dev": "nodemon -w ./commands/main/dist/main.js -x \"./bin/geo main\"",
+		"predev": "yarn pretty && yarn lint",
+		"watch": "tsc --build tsconfig.build.json -w",
+		"build": "tsc --build tsconfig.build.json",
+		"precommit": "yarn pretty && yarn lint && yarn clean && yarn build",
+		"clean": "rm {commands,libs}/*/src/*.{js*,d.ts} {commands,libs}/*/tsconfig.build.tsbuildinfo {commands,libs}/*/dist/* 2>/dev/null || true",
+		"show": "ls {commands,libs}/*/src/*.js {commands,libs}/*/dist/*.d.ts 2>/dev/null || true"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"concurrently": "^4.1.0",
+		"fs-extra": "^7.0.1",
+		"jest": "^24.5.0",
+		"lerna": "^3.13.1",
+		"nodemon": "^1.18.10",
+		"prettier": "^1.16.4",
+		"tsconfig-paths": "^3.8.0",
+		"tslint": "^5.14.0",
+		"tslint-consistent-codestyle": "^1.15.1",
+		"tslint-immutable": "^5.5.2",
+		"tslint-microsoft-contrib": "^6.1.0",
+		"typescript": "^3.4.1",
+		"vrsource-tslint-rules": "^6.0.0"
+	}
+}

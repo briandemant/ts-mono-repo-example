@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+ROOT=$(
+    cd $(dirname $0)/../
+    pwd
+)
+
+package=$1
+command=$2
+
+if [[ "$package" == "help" ]] && [[ "$command" != "" ]]; then
+    package=$command
+    command=$3
+    # echo "Help for $package $command"
+    [[ "$command" == "" ]] && command=$package
+    if [[ -f $ROOT/commands/$package/bin/$command.md ]]; then
+        cat $ROOT/commands/$package/bin/$command.md
+    fi
+    echo
+    echo
+    exit
+fi
+
+if [[ "$package" == "" ]] || [[ "$package" == "help" ]]; then
+    echo "Commmands"
+    cd $ROOT/commands
+    for command in $(ls -d */bin/); do
+        package="${command%%/*}"
+        echo
+        echo "  $package:"
+        for command in $(ls -d $package/bin/* | egrep -v '.md$'); do
+            package="${command%%/*}"
+            command="${command##*/}"
+            help="?"
+            if [[ -f $ROOT/commands/$package/bin/$command.md ]]; then
+                help=$(head -1 $ROOT/commands/$package/bin/$command.md)
+            fi
+            echo "    $command : $help"
+        done
+    done
+    echo
+    exit
+fi
+
+if [[ -d $ROOT/commands/$package/bin/ ]] || [[ "" != "$(ls -d $ROOT/commands/$package*/bin/ 2>/dev/null)" ]]; then
+    shift
+    cd $ROOT/commands/$package*/
+    package=$(basename $(pwd))
+    cd bin
+else
+    echo "ERROR: Cannot find package '$package'"
+    exit 1
+fi
+
+# echo "package: $package"
+# echo "command: $command"
+if [[ "" == "$command" ]]; then
+    command=$package
+fi
+
+if [[ -e $command.js ]] || [[ "" != "$(ls $command*.js 2>/dev/null)" ]]; then
+    shift
+elif [[ -e $package.js ]] || [[ "" != "$(ls $package*.js 2>/dev/null)" ]]; then
+    command=$(basename $(ls $package*.js))
+fi
+# echo "package: $package"
+# echo "command: $command"
+# set -x
+if [[ -f $ROOT/commands/$package/bin/$command.js ]]; then
+    node $ROOT/commands/$package/bin/$command.js $*
+elif [[ "" != "$(ls -d $ROOT/commands/$package/bin/$command*.js 2>/dev/null)" ]]; then
+    node $ROOT/commands/$package/bin/$command*.js $*
+else
+    echo "ERROR: Cannot find command '$command' in '$package'"
+    exit 1
+fi

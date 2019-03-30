@@ -1,0 +1,15 @@
+{
+	"name": "@geo/main",
+	"version": "0.0.1",
+	"description": "entry point",
+	"license": "MIT",
+	"private": true,
+	"main": "dist/main.js",
+	"types": "dist/main.d.ts",
+	"scripts": {
+		"hello": "echo hello from main"
+	},
+	"dependencies": {
+		"lodash": "^4.17.11"
+	}
+}
