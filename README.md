@@ -20,7 +20,7 @@ It automatically delegates to each package with a sub command.
 With one param package and command have same name
 
 ```bash
-> geo main # => node commands/main/bin/main
+> geo main # => node commands/main/bin/main.js
 main here
 length 12.041594578792294
 ```
@@ -28,14 +28,14 @@ length 12.041594578792294
 With two first is package second is sub command
 
 ```bash
-> geo hello # => node commands/main/bin/hello
+> geo hello # => node commands/main/bin/hello.js
 hello world!!
 ```
  
 ... all others are just params to the subcommand
 
 ```bash
-> geo hello beautiful world # => node commands/main/bin/hello beautiful world
+> geo hello beautiful world # => node commands/main/bin/hello.js beautiful world
 hello beautiful world
 ```
  
