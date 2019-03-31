@@ -1,16 +1,14 @@
 #!/usr/bin/env bash
 #set -x
 set -e
-ROOT=$(
-    cd $(dirname $0)/../
-    pwd
-)
+ROOT=$( cd $(dirname $0)/../; pwd )
 
 function print_debug() {
 pwd
     echo "package : $package"
     echo "command : $command"
 }
+cwd=$(pwd)
 package=$1
 command=$2
 ## ------------------------------------------------------------
@@ -106,6 +104,9 @@ elif [[ "" != "$(ls $package*.{js,sh} 2>/dev/null)" ]]; then
 else
     shift
 fi
+
+## reset current working directory
+cd $cwd
 
 ## ------------------------------------------------------------
 ## execute command if exists
