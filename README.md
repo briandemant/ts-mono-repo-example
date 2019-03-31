@@ -89,3 +89,4 @@ is dependant upon libs/point. By providing the dependencies explicitly
 
 * test .. using jest
 * faster build with bazel?
+* client side with webpack + webpack-dev-server [inspiration](https://medium.com/@kenneth_chau/speeding-up-webpack-typescript-incremental-builds-by-7x-3912ba4c1d15)
