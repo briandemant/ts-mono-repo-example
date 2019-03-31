@@ -1,18 +1,29 @@
 #!/usr/bin/env bash
+#set -x
+set -e
 ROOT=$(
     cd $(dirname $0)/../
     pwd
 )
 
+function print_debug() {
+pwd
+    echo "package : $package"
+    echo "command : $command"
+}
 package=$1
 command=$2
-
+## ------------------------------------------------------------
+## show full help for a command
+## ------------------------------------------------------------
 if [[ "$package" == "help" ]] && [[ "$command" != "" ]]; then
     package=$command
     command=$3
     # echo "Help for $package $command"
     [[ "$command" == "" ]] && command=$package
-    if [[ -f $ROOT/commands/$package/bin/$command.md ]]; then
+    if [[ -f $ROOT/bin/commands/$package/$command.md ]]; then
+        cat $ROOT/bin/commands/$package/$command.md
+    elif [[ -f $ROOT/commands/$package/bin/$command.md ]]; then
         cat $ROOT/commands/$package/bin/$command.md
     fi
     echo
@@ -20,8 +31,28 @@ if [[ "$package" == "help" ]] && [[ "$command" != "" ]]; then
     exit
 fi
 
+## ------------------------------------------------------------
+## show short help for all commands
+## ------------------------------------------------------------
 if [[ "$package" == "" ]] || [[ "$package" == "help" ]]; then
     echo "Commmands"
+    cd $ROOT/bin/commands/
+    for command in $(ls -d *); do
+        package="${command%%/*}"
+        echo
+        echo "  $package:"
+        for command in $(ls -d $package/* | egrep -v '.md$'); do
+            package="${command%%/*}"
+            command="${command##*/}"
+            command="${command%%.*}"
+            help="?"
+            if [[ -f  $package/$command.md ]]; then
+                help=$(head -1  $package/$command.md)
+            fi
+            echo "    $command : $help"
+        done
+    done
+
     cd $ROOT/commands
     for command in $(ls -d */bin/); do
         package="${command%%/*}"
@@ -41,31 +72,47 @@ if [[ "$package" == "" ]] || [[ "$package" == "help" ]]; then
     exit
 fi
 
-if [[ -d $ROOT/commands/$package/bin/ ]] || [[ "" != "$(ls -d $ROOT/commands/$package*/bin/ 2>/dev/null)" ]]; then
+## ------------------------------------------------------------
+## extrapolate full package name from prefix
+## ------------------------------------------------------------
+if [[ -d $ROOT/bin/commands/$package/ ]] || [[ "" != "$(ls -d $ROOT/bin/commands/$package*/ 2>/dev/null)" ]]; then
+    shift
+    cd $ROOT/bin/commands/$package*/
+    package=$(basename $(pwd))
+elif [[ -d $ROOT/commands/$package/bin/ ]] || [[ "" != "$(ls -d $ROOT/commands/$package*/bin/ 2>/dev/null)" ]]; then
     shift
     cd $ROOT/commands/$package*/
     package=$(basename $(pwd))
-    cd bin
 else
     echo "ERROR: Cannot find package '$package'"
     exit 1
 fi
 
-# echo "package: $package"
-# echo "command: $command"
+## ------------------------------------------------------------
+## try and guess the command from prefix or package
+## ------------------------------------------------------------
 if [[ "" == "$command" ]]; then
+    ## no command means command of same name as package
     command=$package
+elif [[ "" != "$(ls $command*.{js,sh} 2>/dev/null)" ]]; then
+    ## a command of prefix exists
+    command=$(basename $(ls $command*.{js,sh}))
+    command="${command%%.*}"
+    shift
+elif [[ "" != "$(ls $package*.{js,sh} 2>/dev/null)" ]]; then
+    ## a command of package name exists
+    command=$(basename $(ls $package*.{js,sh}))
+    command="${command%%.*}"
+else
+    shift
 fi
 
-if [[ -e $command.js ]] || [[ "" != "$(ls $command*.js 2>/dev/null)" ]]; then
-    shift
-elif [[ -e $package.js ]] || [[ "" != "$(ls $package*.js 2>/dev/null)" ]]; then
-    command=$(basename $(ls $package*.js))
-fi
-# echo "package: $package"
-# echo "command: $command"
-# set -x
-if [[ -f $ROOT/commands/$package/bin/$command.js ]]; then
+## ------------------------------------------------------------
+## execute command if exists
+## ------------------------------------------------------------
+if [[ -f $ROOT/bin/commands/$package/$command.sh ]]; then
+    $ROOT/bin/commands/$package/$command.sh $*
+elif [[ -f $ROOT/commands/$package/bin/$command.js ]]; then
     node $ROOT/commands/$package/bin/$command.js $*
 elif [[ "" != "$(ls -d $ROOT/commands/$package/bin/$command*.js 2>/dev/null)" ]]; then
     node $ROOT/commands/$package/bin/$command*.js $*
