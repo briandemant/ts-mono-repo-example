@@ -96,12 +96,12 @@ if [[ "" == "$command" ]]; then
     command=$package
 elif [[ "" != "$(ls $command*.{js,sh} 2>/dev/null)" ]]; then
     ## a command of prefix exists
-    command=$(basename $(ls $command*.{js,sh}))
+    command=$(basename $(ls $command*.{js,sh}  2>/dev/null))
     command="${command%%.*}"
     shift
 elif [[ "" != "$(ls $package*.{js,sh} 2>/dev/null)" ]]; then
     ## a command of package name exists
-    command=$(basename $(ls $package*.{js,sh}))
+    command=$(basename $(ls $package*.{js,sh}  2>/dev/null))
     command="${command%%.*}"
 else
     shift
