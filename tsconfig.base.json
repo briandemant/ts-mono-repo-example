@@ -1,9 +1,9 @@
 // tsconfig global project options - build or dev
 {
 	"compilerOptions": {
-		"target": "es6",
+		"target": "esnext",
 		"module": "commonjs",
-		"lib": ["es6"],
+		"lib": [],
 
 		// All shared (dev/build) rules
 		"noUnusedLocals": true
