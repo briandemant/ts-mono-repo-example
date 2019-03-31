@@ -10,15 +10,22 @@
 	],
 	"scripts": {
 		"hello": "lerna run hello",
+
 		"pretty": "prettier --list-different --write --config prettier.config.js {commands,libs}/*/src/*.{ts,tsx,js*} {commands,libs}/*/*.{ts,tsx,js*} *.{ts,tsx,js*}",
 		"lint": "tslint --fix {commands,libs}/*/src/*",
+
 		"dev": "nodemon -w ./commands/main/dist/main.js -x \"./bin/geo main\"",
 		"predev": "yarn pretty && yarn lint",
-		"watch": "tsc --build tsconfig.build.json -w",
+
 		"build": "tsc --build tsconfig.build.json",
-		"precommit": "yarn pretty && yarn lint && yarn clean && yarn build",
+		"build:watch": "tsc --build tsconfig.build.json -w",
+		"build:clean": "yarn clean && tsc --build tsconfig.build.json",
+
 		"clean": "rm {commands,libs}/*/src/*.{js*,d.ts} {commands,libs}/*/tsconfig.build.tsbuildinfo {commands,libs}/*/dist/* 2>/dev/null || true",
-		"show": "ls {commands,libs}/*/src/*.js {commands,libs}/*/dist/*.d.ts 2>/dev/null || true"
+		"show:output": "ls -l {commands,libs}/*/dist/*.js 2>/dev/null || true",
+		"show:garbage": "ls -l {commands,libs}/*/src/*.{js,map,d.ts} 2>/dev/null | grep . || echo \"\\n-- no garbage --\\n\"",
+
+		"commit-prepare": "yarn pretty && yarn lint && yarn clean && yarn build"
 	},
 	"dependencies": {},
 	"devDependencies": {
