@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"baseUrl": "",
+		"module": "esnext",
+		"target": "es5",
+		"lib": ["dom", "esnext", "es6"],
+		"sourceMap": true,
+		"allowJs": true,
+		"jsx": "react",
+		"moduleResolution": "node",
+		"rootDir": "src",
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noImplicitAny": false,
+		"strictNullChecks": true,
+		"suppressImplicitAnyIndexErrors": true,
+		"noUnusedLocals": true,
+		"paths": {
+			"@libs/components": ["Libs/Components/dist/index.js"]
+		}
+	}
+}

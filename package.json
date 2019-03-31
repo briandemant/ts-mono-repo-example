@@ -13,14 +13,27 @@
 		"pretty": "prettier --list-different --write --config prettier.config.js {commands,libs}/*/src/*.{ts,tsx,js*} {commands,libs}/*/*.{ts,tsx,js*} *.{ts,tsx,js*}",
 		"lint": "tslint --fix {commands,libs}/*/src/*",
 		"dev": "nodemon -w ./commands/main/dist/main.js -x \"./bin/geo main\"",
+		"dev-compat": "nodemon -w ./libs/point/dist/advanced.js ./libs/point/dist/advanced.js",
 		"predev": "yarn pretty && yarn lint",
 		"watch": "tsc --build tsconfig.build.json -w",
 		"build": "tsc --build tsconfig.build.json",
 		"precommit": "yarn pretty && yarn lint && yarn clean && yarn build",
 		"clean": "rm {commands,libs}/*/src/*.{js*,d.ts} {commands,libs}/*/tsconfig.build.tsbuildinfo {commands,libs}/*/dist/* 2>/dev/null || true",
-		"show": "ls {commands,libs}/*/src/*.js {commands,libs}/*/dist/*.d.ts 2>/dev/null || true"
+		"show": "ls {commands,libs}/*/src/*.js {commands,libs}/*/dist/*.d.ts 2>/dev/null || true",
+		"type-check": "tsc  --noEmit",
+		"type-check:watch": "npm run type-check -- --watch",
+		"build2": "npm run build:types && npm run build:js",
+		"build:types": "tsc --build tsconfig.build.json --emitDeclarationOnly",
+		"build:js": "lerna run build:js"
 	},
-	"dependencies": {},
+	"dependencies": {
+		"@babel/cli": "^7.2.3",
+		"@babel/core": "^7.4.0",
+		"@babel/plugin-proposal-class-properties": "^7.4.0",
+		"@babel/plugin-proposal-object-rest-spread": "^7.4.0",
+		"@babel/preset-env": "^7.4.2",
+		"@babel/preset-typescript": "^7.3.3"
+	},
 	"devDependencies": {
 		"concurrently": "^4.1.0",
 		"fs-extra": "^7.0.1",

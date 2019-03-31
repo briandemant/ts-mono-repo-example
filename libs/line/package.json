@@ -6,7 +6,8 @@
 	"main": "dist/line.js",
 	"types": "dist/line.d.ts",
 	"scripts": {
-		"hello": "echo hello from line"
+		"hello": "echo hello from line",
+		"build:js": "babel src --out-dir dist --extensions \".ts,.tsx\""
 	},
 	"dependencies": {}
 }

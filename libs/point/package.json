@@ -6,6 +6,7 @@
 	"main": "dist/point.js",
 	"types": "dist/point.d.ts",
 	"scripts": {
-		"hello": "echo hello from point"
+		"hello": "echo hello from point",
+		"build:js": "babel src --out-dir dist --extensions \".ts,.tsx\""
 	}
 }

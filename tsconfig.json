@@ -8,5 +8,6 @@
 			"@geo/point": ["libs/point/src/point.ts"],
 			"@geo/line": ["libs/line/src/line.ts"]
 		}
-	}
+	},
+	"exclude": ["**/dist/*", "**/bin/*", "*.js"]
 }
